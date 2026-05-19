@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alvin ❤️ Ritah</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+    body { min-height: 100vh; overflow-y: auto; text-align: center; }
+    .entrance-fade { animation: fadeInPage 1.2s ease-out forwards; }
+    @keyframes fadeInPage { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    .countdown-box { margin: 30px auto; padding: 20px; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(5px); border-radius: 15px; max-width: 500px; border: 1px solid #ff4b6e; }
+    #timer { font-size: 1.8em; color: #ffb3c1; letter-spacing: 2px; }
+    .notes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; padding: 20px; max-width: 800px; margin: 0 auto; }
+    .note-card { background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 15px; border: 1px solid rgba(255, 75, 110, 0.3); }
+    .page3-footer { position: relative; height: 180px; margin-top: 40px; }
+    #no-btn { position: absolute; transition: 0.15s ease; background: #444; color: white; left: calc(50% + 80px); top: 20px; }
+    .yes-btn { position: absolute; left: calc(50% - 180px); top: 20px; background: #ff4b6e !important; color: white !important; box-shadow: 0 4px 20px rgba(255, 75, 110, 0.5); z-index: 100; }
+    .yes-btn:hover { background: #ff2a55 !important; transform: scale(1.05); }
+</style>
+</head>
+<body>
+
+<div class="entrance-fade">
+
+    <!-- 🎵 MUSIC TOGGLE BRIDGE -->
+    <button class="music-control" onclick="toggleMusic()">
+        <span id="music-icon">🎵</span> <span id="music-text">Play Our Song</span>
+    </button>
+    <audio id="bg-music" loop><source src="our-song.mp3" type="audio/mpeg"></audio>
+
+    <div class="container" style="margin-top: 30px;">
+        <h1>How long we've been us... ♾️</h1>
+        <div class="countdown-box">
+            <div id="timer">Counting our moments...</div>
+        </div>
+    </div>
+
+    <div class="notes-grid">
+        <div class="note-card"><h3>Your Smile 😊</h3></div>
+        <div class="note-card"><h3>Your Heart ❤️</h3></div>
+        <div class="note-card"><h3>Our Peace 🕊️</h3></div>
+        <div class="note-card"><h3>Your Strength 💪</h3></div>
+    </div>
+
+    <div class="page3-footer">
+        <button class="yes-btn" onclick="handleYesClick()">Yes, Forever ❤️</button>
+        <button id="no-btn" onmouseover="moveButton()" onclick="moveButton()">No 💔</button>
+    </div>
+
+</div>
+
+<script>
+    const audio = document.getElementById("bg-music");
+
+    audio.addEventListener("timeupdate", () => {
+        localStorage.setItem("musicTimestamp", audio.currentTime);
+    });
+
+    if (localStorage.getItem("musicPlaying") === "true") {
+        const savedTime = localStorage.getItem("musicTimestamp");
+        if (savedTime) { audio.currentTime = parseFloat(savedTime); }
+        audio.play().catch(() => {});
+        document.getElementById("music-icon").innerText = "⏸️";
+        document.getElementById("music-text").innerText = "Pause Music";
+    }
+
+    function toggleMusic() {
+        if (audio.paused) {
+            audio.play();
+            localStorage.setItem("musicPlaying", "true");
+            document.getElementById("music-icon").innerText = "⏸️";
+            document.getElementById("music-text").innerText = "Pause Music";
+        } else {
+            audio.pause();
+            localStorage.setItem("musicPlaying", "false");
+            document.getElementById("music-icon").innerText = "🎵";
+            document.getElementById("music-text").innerText = "Play Our Song";
+        }
+    }
+
+    const startDate = new Date("December 20, 2024 00:00:00").getTime();
+
+    function updateTimer() {
+        const now = new Date().getTime();
+        const diff = now - startDate;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const secs = Math.floor((diff % (1000 * 60)) / 1000);
+        document.getElementById("timer").innerHTML = days + "d " + hours + "h " + mins + "m " + secs + "s";
+    }
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    function moveButton() {
+        const btn = document.getElementById("no-btn");
+        const maxWidth = window.innerWidth - btn.offsetWidth - 20;
+        const randomX = Math.floor(Math.random() * maxWidth);
+        const randomY = Math.floor(Math.random() * 100); 
+        btn.style.left = randomX + "px";
+        btn.style.top = randomY + "px";
+    }
+
+    function handleYesClick() {
+        localStorage.setItem("musicTimestamp", audio.currentTime);
+        window.location.href = "scratch.html";
+    }
+</script>
+</body>
+</html>

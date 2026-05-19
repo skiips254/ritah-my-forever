@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alvin ❤️ Ritah</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- 🎵 MUSIC TOGGLE BRIDGE -->
+<button class="music-control" onclick="toggleMusic()">
+    <span id="music-icon">🎵</span> <span id="music-text">Play Our Song</span>
+</button>
+<audio id="bg-music" loop>
+    <source src="our-song.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 💖 ORBITING IMAGES -->
+<div class="orbit-wrapper">
+    <div class="orbit">
+        <img src="img1.jpg">
+        <img src="img2.jpg">
+        <img src="img3.jpg">
+        <img src="img4.jpg">
+        <img src="img5.jpg" class="center-img">
+    </div>
+</div>
+
+<!-- 💖 TIMELINE STORY -->
+<div class="story">
+    <div class="step">💖 Baby… I don’t even know how to fully explain what you mean to me.</div>
+    <div class="step">💞 You came into my life and became my peace.</div>
+    <div class="step">💬 I was always there for you because I cared deeply about you.</div>
+    <div class="step">💖 And slowly… I fell for you without realizing it.</div>
+    <div class="step">📅 On 27th November 2024, I told you how I felt.</div>
+    <div class="step">⏳ You asked me to wait… and I waited because it was always you.</div>
+    <div class="step">💞 On 20th December 2024, you said you loved me too ❤️</div>
+    <div class="step">💍 That day I promised to love you forever.</div>
+    <div class="step">♾️ “We fight, we fix, we stay.”</div>
+
+    <div class="step final">💍 ALVIN ❤️ HEARTS 💖 RITAH 💞💍</div>
+</div>
+
+<!-- 💖 NAVIGATION -->
+<div class="buttons">
+    <a href="index.html">
+        <button style="background: rgba(255,255,255,0.2); color: white;">💖 Home</button>
+    </a>
+    <button onclick="goNextPage()">Next ➡</button>
+</div>
+
+<!-- 🌑 TRANSITION OVERLAY -->
+<div class="transition-overlay" id="overlay"></div>
+
+<script>
+const audio = document.getElementById("bg-music");
+
+audio.addEventListener("timeupdate", () => {
+    localStorage.setItem("musicTimestamp", audio.currentTime);
+});
+
+if (localStorage.getItem("musicPlaying") === "true") {
+    const savedTime = localStorage.getItem("musicTimestamp");
+    if (savedTime) { audio.currentTime = parseFloat(savedTime); }
+    audio.play().catch(() => {});
+    document.getElementById("music-icon").innerText = "⏸️";
+    document.getElementById("music-text").innerText = "Pause Music";
+}
+
+function toggleMusic() {
+    if (audio.paused) {
+        audio.play();
+        localStorage.setItem("musicPlaying", "true");
+        document.getElementById("music-icon").innerText = "⏸️";
+        document.getElementById("music-text").innerText = "Pause Music";
+    } else {
+        audio.pause();
+        localStorage.setItem("musicPlaying", "false");
+        document.getElementById("music-icon").innerText = "🎵";
+        document.getElementById("music-text").innerText = "Play Our Song";
+    }
+}
+
+window.addEventListener("load", () => {
+    const steps = document.querySelectorAll(".step");
+    steps.forEach((step, i) => {
+        setTimeout(() => {
+            step.classList.add("show");
+        }, i * 900);
+    });
+});
+
+function goNextPage() {
+    localStorage.setItem("musicTimestamp", audio.currentTime);
+    const overlay = document.getElementById("overlay");
+    overlay.classList.add("active");
+
+    setTimeout(() => {
+        window.location.href = "page3.html";
+    }, 900);
+}
+</script>
+
+</body>
+</html>
