@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Secret for You 💖</title>
+<link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+<style>
+    body { text-align: center; }
+    .scratch-container {
+        position: relative;
+        width: 300px;
+        height: 150px;
+        margin: 40px auto;
+        user-select: none;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        border-radius: 15px;
+    }
+    .base-message {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: white;
+        color: #4A0E1E;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6em;
+        border-radius: 15px;
+        font-weight: bold;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    #scratch-canvas {
+        position: absolute;
+        top: 0; left: 0;
+        cursor: crosshair;
+        border-radius: 15px;
+        z-index: 10;
+    }
+    #next-final { 
+        display: none; 
+        margin-top: 40px; 
+    }
+</style>
+</head>
+<body>
+
+    <!-- 🎵 MUSIC TOGGLE -->
+    <button class="music-control" onclick="toggleMusic()">
+        <span id="music-icon">🎵</span> <span id="music-text">Play Our Song</span>
+    </button>
+    <audio id="bg-music" loop>
+        <source src="our-song.mp3" type="audio/mpeg">
+    </audio>
+
+    <h1 style="margin-top: 60px;">Scratch to reveal my promise... 💌</h1>
+
+    <div class="scratch-container">
+        <div class="base-message">I will love you in every lifetime. 🙌💍</div>
+        <canvas id="scratch-canvas" width="300" height="150"></canvas>
+    </div>
+
+    <p id="instruction" style="font-size: 1.3em; color: #ffb3c1;">Use your finger or mouse to scratch the surface!</p>
+
+    <div id="next-final">
+        <button onclick="triggerFakeError()" style="background: #ff4b6e; color: white; box-shadow: 0 4px 15px rgba(255, 75, 110, 0.4);">See your final surprise ✨</button>
+    </div>
+
+<script>
+    const audio = document.getElementById("bg-music");
+    
+    audio.addEventListener("timeupdate", () => {
+        localStorage.setItem("musicTimestamp", audio.currentTime);
+    });
+
+    if (localStorage.getItem("musicPlaying") === "true") {
+        const savedTime = localStorage.getItem("musicTimestamp");
+        if (savedTime) { audio.currentTime = parseFloat(savedTime); }
+        audio.play().catch(() => {});
+        document.getElementById("music-icon").innerText = "⏸️";
+        document.getElementById("music-text").innerText = "Pause Music";
+    }
+
+    function toggleMusic() {
+        if (audio.paused) {
+            audio.play();
+            localStorage.setItem("musicPlaying", "true");
+            document.getElementById("music-icon").innerText = "⏸️";
+            document.getElementById("music-text").innerText = "Pause Music";
+        } else {
+            audio.pause();
+            localStorage.setItem("musicPlaying", "false");
+            document.getElementById("music-icon").innerText = "🎵";
+            document.getElementById("music-text").innerText = "Play Our Song";
+        }
+    }
+
+    const canvas = document.getElementById("scratch-canvas");
+    const ctx = canvas.getContext("2d");
+    let isDrawing = false;
+
+    ctx.fillStyle = "#ff4b6e";
+    ctx.fillRect(0, 0, 300, 150);
+    ctx.fillStyle = "white";
+    ctx.font = "bold 24px 'Dancing Script', cursive";
+    ctx.textAlign = "center";
+    ctx.fillText("Scratch Here ❤️", 150, 85);
+
+    function scratch(e) {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 22, 0, Math.PI * 2);
+        ctx.fill();
+        
+        document.getElementById("next-final").style.display = "inline-block";
+        document.getElementById("instruction").style.display = "none";
+    }
+
+    canvas.addEventListener("mousedown", () => isDrawing = true);
+    canvas.addEventListener("mouseup", () => isDrawing = false);
+    canvas.addEventListener("mouseleave", () => isDrawing = false);
+    canvas.addEventListener("mousemove", scratch);
+    canvas.addEventListener("touchstart", (e) => { isDrawing = true; e.preventDefault(); });
+    canvas.addEventListener("touchend", () => isDrawing = false);
+    canvas.addEventListener("touchmove", (e) => { scratch(e); e.preventDefault(); });
+
+    function triggerFakeError() {
+        localStorage.setItem("musicTimestamp", audio.currentTime);
+        alert("⚠️ Fatal Error 404: LoveOverflowException detected.");
+        const override = confirm("System core is overloaded by your too much beauty. Do you wish to override parameters and proceed securely?");
+        if (override) {
+            alert("Override authorized. Injecting core system update: ForeverMode.exe... ❤️");
+            window.location.href = "final.html";
+        } else {
+            alert("Access denied... Just kidding, you don't have a choice! 😉");
+            window.location.href = "final.html";
+        }
+    }
+</script>
+</body>
+</html>
